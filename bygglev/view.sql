@@ -123,6 +123,7 @@ SELECT levnr, navn, adresse, levby, postnr FROM levinfo;
 
 -- f) ii) Lag en virtuell tabell (view) slik at brukerne i størst mulig grad kan jobbe på samme måte mot de to nye tabellene som den gamle.
 DROP VIEW IF EXISTS levinfo_view;
+
 CREATE VIEW levinfo_view AS
 SELECT nl.levnr, nl.navn, nl.adresse, nl.levby, bf.fylke, nl.postnr
 FROM ny_levinfo nl
@@ -137,6 +138,7 @@ WHERE pi.levnr IS NULL;
 -- h) Finn leverandørnummer for den leverandør som kan levere ordre nr 18 til lavest totale beløp.
 DROP VIEW IF EXISTS leverandor_full_ordre;
 DROP VIEW IF EXISTS leverandor_deler;
+
 CREATE VIEW leverandor_deler AS
 SELECT od.ordrenr, od.delnr, pi.levnr, pi.pris, od.kvantum, (pi.pris * od.kvantum) AS total_pris
 FROM ordredetalj od
