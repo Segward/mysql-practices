@@ -72,10 +72,10 @@ JOIN eteam e ON (ga.team1 = e.id) WHERE e.coach = "Fernando Santos";
 
 /*
     Oppgave 2 e using OR to get the team name from the game table where the coach is Fernando Santos
+
+
+     Kan lære mer om referense og diferense
+     
 */
 SELECT ga.mdate, e.teamname FROM game ga
 JOIN eteam e ON (ga.team1 = e.id) OR (ga.team2 = e.id) WHERE e.coach = "Fernando Santos";
-
-/*
-    Kan lære mer om referense og diferense
-*/

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-CONTAINER_NAME="mysql-container"
+CONTAINER_NAME="mysql-practices-container"
 MYSQL_USER="root"
 MYSQL_PASSWORD="root"
 
