@@ -98,6 +98,9 @@ FROM prisinfo pi
 WHERE pi.pris > (SELECT pris FROM prisinfo WHERE katalognr = 'X7770');
 
 -- f) Lag én ny tabell som inneholder byer og fylker, og en tabell som er lik levinfo unntatt kolonnen Fylke.
+DROP TABLE IF EXISTS ny_levinfo;
+DROP TABLE IF EXISTS by_fylke;
+
 CREATE TABLE by_fylke (
     levby VARCHAR(20) PRIMARY KEY,
     fylke VARCHAR(20) NOT NULL
@@ -119,6 +122,7 @@ INSERT INTO ny_levinfo (levnr, navn, adresse, levby, postnr)
 SELECT levnr, navn, adresse, levby, postnr FROM levinfo;
 
 -- f) ii) Lag en virtuell tabell (view) slik at brukerne i størst mulig grad kan jobbe på samme måte mot de to nye tabellene som den gamle.
+DROP VIEW IF EXISTS levinfo_view;
 CREATE VIEW levinfo_view AS
 SELECT nl.levnr, nl.navn, nl.adresse, nl.levby, bf.fylke, nl.postnr
 FROM ny_levinfo nl
@@ -131,6 +135,8 @@ LEFT JOIN prisinfo pi ON li.levnr = pi.levnr
 WHERE pi.levnr IS NULL;
 
 -- h) Finn leverandørnummer for den leverandør som kan levere ordre nr 18 til lavest totale beløp.
+DROP VIEW IF EXISTS leverandor_full_ordre;
+DROP VIEW IF EXISTS leverandor_deler;
 CREATE VIEW leverandor_deler AS
 SELECT od.ordrenr, od.delnr, pi.levnr, pi.pris, od.kvantum, (pi.pris * od.kvantum) AS total_pris
 FROM ordredetalj od
