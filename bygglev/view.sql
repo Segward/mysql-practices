@@ -2,7 +2,8 @@
 SELECT * FROM borettslag WHERE etabl_aar BETWEEN 1975 AND 1985;
 
 -- 2. Skriv ut en liste over andelseiere. 
-SELECT CONCAT(fornavn, ' ', etternavn, ', ansiennitet: ', ansiennitet, ' år') FROM andelseier
+SELECT fornavn, etternavn, ansiennitet
+FROM andelseier
 ORDER BY ansiennitet DESC;
 
 -- 3. Skriv ut det eldste borettslaget. LIMIT 1 returns only the first row
@@ -11,8 +12,10 @@ ORDER BY etabl_aar ASC
 LIMIT 1;
 
 -- 4. Skriv ut bygninger med leilighet på minst 3 rom.
-SELECT bygn_adr FROM bygning
-WHERE bygn_id IN (SELECT bygn_id FROM leilighet WHERE ant_rom >= 3);
+SELECT DISTINCT b.bygn_adr
+FROM bygning b
+JOIN leilighet l ON b.bygn_id = l.bygn_id
+WHERE l.ant_rom >= 3;
 
 -- 5. Finn alle bygninger i borettslaget "Tertitten".
 SELECT * FROM bygning WHERE bolag_navn = 'Tertitten';
@@ -34,8 +37,10 @@ ORDER BY ant_etasjer DESC
 LIMIT 1;
 
 -- 9. Finn navn og nummer til andelseiere som ikke har leilighet.
-SELECT fornavn, etternavn, and_eier_nr FROM andelseier
-WHERE and_eier_nr NOT IN (SELECT and_eier_nr FROM leilighet);
+SELECT fornavn, etternavn, andelseier.and_eier_nr 
+FROM andelseier
+WHERE andelseier.and_eier_nr NOT IN 
+      (SELECT leilighet.and_eier_nr FROM leilighet);
 
 -- 10. Finn antall andelseiere pr borettslag, sortert etter antallet. 
 SELECT bo.bolag_navn, COUNT(a.and_eier_nr) AS antall_andelseiere
@@ -45,15 +50,20 @@ GROUP BY bo.bolag_navn
 ORDER BY antall_andelseiere DESC;
 
 -- 11. Skriv ut en liste over alle andelseiere. 
-SELECT CONCAT(fornavn, ' ', etternavn, IFNULL(CONCAT(', leilighet: ', leil_nr), '')) AS andelseier_info
-FROM andelseier
-LEFT JOIN leilighet ON andelseier.and_eier_nr = leilighet.and_eier_nr;
+SELECT a.fornavn, a.etternavn, 
+       COALESCE(l.leil_nr, 'Ingen leilighet') AS leilighet
+FROM andelseier a
+LEFT JOIN leilighet l ON a.and_eier_nr = l.and_eier_nr;
 
 -- 12. Hvilke borettslag har leiligheter med eksakt 4 rom?
-SELECT bo.bolag_navn FROM borettslag bo
+SELECT DISTINCT bo.bolag_navn
+FROM borettslag bo
 JOIN bygning b ON bo.bolag_navn = b.bolag_navn
 JOIN leilighet l ON b.bygn_id = l.bygn_id
 WHERE l.ant_rom = 4;
+
+-- 12. ii) Hvilke leiligheter har eksakt 4 rom? sjeke om det er riktig
+SELECT * FROM leilighet;
 
 -- 13. Skriv ut en liste over antall andelseiere pr postnr og poststed.
 SELECT ps.postnr, ps.poststed, COUNT(a.and_eier_nr) AS antall_andelseiere
@@ -114,12 +124,14 @@ CREATE TABLE ny_levinfo (
     navn VARCHAR(20) NOT NULL,
     adresse VARCHAR(20) NOT NULL,
     levby VARCHAR(20) NOT NULL,
-    postnr INTEGER NOT NULL,
-    CONSTRAINT ny_levinfo_fk FOREIGN KEY (levby) REFERENCES by_fylke (levby)
+    postnr INTEGER NOT NULL
 );
 
 INSERT INTO ny_levinfo (levnr, navn, adresse, levby, postnr)
 SELECT levnr, navn, adresse, levby, postnr FROM levinfo;
+
+SELECT * FROM ny_levinfo;
+SELECT * FROM by_fylke;
 
 -- f) ii) Lag en virtuell tabell (view) slik at brukerne i størst mulig grad kan jobbe på samme måte mot de to nye tabellene som den gamle.
 DROP VIEW IF EXISTS levinfo_view;
@@ -128,6 +140,8 @@ CREATE VIEW levinfo_view AS
 SELECT nl.levnr, nl.navn, nl.adresse, nl.levby, bf.fylke, nl.postnr
 FROM ny_levinfo nl
 JOIN by_fylke bf ON nl.levby = bf.levby;
+
+SELECT * FROM levinfo_view;
 
 -- g) Finn ut hvilke byer en i tilfelle ikke får leverandør i hvis leverandører som ikke er representert i Prisinfo-tabellen slettes.
 SELECT li.levby
@@ -145,6 +159,7 @@ FROM ordredetalj od
 JOIN prisinfo pi ON od.delnr = pi.delnr
 WHERE od.ordrenr = 18;
 
+-- Using HAVING to filter out leverandorer that can't deliver all deler in ordre 18
 CREATE VIEW leverandor_full_ordre AS
 SELECT ld.levnr, SUM(ld.total_pris) AS total_belop
 FROM leverandor_deler ld
