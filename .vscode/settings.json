@@ -41,6 +41,20 @@
             "database": "bygglev",
             "username": "root",
             "password": "root"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "transaksjoner",
+            "database": "transaksjoner",
+            "username": "root",
+            "password": "root"
         }
     ]
 }
