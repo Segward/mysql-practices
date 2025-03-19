@@ -13,7 +13,7 @@ SELECT
     b.kvalifikasjonsnr, 
     b.beskrivelse AS kvalifikasjon
 FROM Kandidat a
-INNER JOIN Kvalifikasjon b 
+INNER JOIN Kvalifikasjon b  -- Ekskluderer kandidater uten kvalifikasjoner
 ON a.kandidatnr = b.kandidatnr
 ORDER BY a.kandidatnr, b.kvalifikasjonsnr;
 
@@ -24,7 +24,7 @@ SELECT
     b.kvalifikasjonsnr, 
     b.beskrivelse AS kvalifikasjon
 FROM Kandidat a
-LEFT JOIN Kvalifikasjon b
+LEFT JOIN Kvalifikasjon b -- Endret INNER til LEFT for å inkludere kandidater uten kvalifikasjoner
 ON a.kandidatnr = b.kandidatnr
 ORDER BY a.kandidatnr, b.kvalifikasjonsnr;
 
