@@ -44,4 +44,13 @@ entity Sluttattest {
     * beskrivelse : TEXT
 }
 
+Oppdrag ||--o{ Bedrift
+Oppdrag ||--o{ Kvalifikasjon
+
+Jobbhistorikk ||--o{ Kandidat
+Jobbhistorikk ||--o{ Oppdrag
+
+Sluttattest ||--o{ Kandidat
+Sluttattest ||--o{ Oppdrag
+
 @enduml
