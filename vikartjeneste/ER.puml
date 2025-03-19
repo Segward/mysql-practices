@@ -1,0 +1,22 @@
+@startuml
+
+entity Konto {
+    * kontonr : INTEGER
+    * saldo : INTEGER
+}
+
+entity Kunde {
+    * kundenr : INTEGER
+    * navn : VARCHAR
+}
+
+entity Transaksjon {
+    * transaksjonsnr : INTEGER
+    * dato : DATE
+    * belop : DECIMAL
+}
+
+Kunde ||--o{ Konto : "owns"
+Konto ||--o{ Transaksjon : "has"
+
+@enduml
