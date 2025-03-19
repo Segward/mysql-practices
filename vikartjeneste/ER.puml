@@ -1,56 +1,62 @@
 @startuml
 
 entity Kandidat {
-    * kandidatnr : INTEGER
-    * fornavn : VARCHAR
-    * etternavn : VARCHAR
-    * telefon : VARCHAR
-    * epost : VARCHAR
+    * kandidatnr : INT
+    * fornavn : VARCHAR(255)
+    * etternavn : VARCHAR(255)
+    * telefon : VARCHAR(20)
+    * epost : VARCHAR(255)
 }
 
 entity Bedrift {
-    * organisasjonsnr : VARCHAR
-    * navn : VARCHAR
-    * telefon : VARCHAR
-    * epost : VARCHAR
+    * navn : VARCHAR(255)
+    * organisasjonsnr : INT
+    * telefon : VARCHAR(20)
+    * epost : VARCHAR(255)
 }
 
 entity Kvalifikasjon {
-    * kvalifikasjonsnr : INTEGER
-    * navn : VARCHAR
+    * kvalifikasjonsnr : INT
+    * kandidatnr : INT
+    * beskrivelse : VARCHAR(255)
 }
 
 entity Oppdrag {
-    * oppdragsnr : INTEGER
-    * bedriftsnavn : VARCHAR
-    * kvalifikasjon : VARCHAR
+    * oppdragsnr : INT
+    * kandidatnr : INT
+    * bedriftsnavn : VARCHAR(255)
+    * Kvalifikasjon : VARCHAR(255)
     * startdato : DATE
     * sluttdato : DATE
 }
 
 entity Jobbhistorikk {
-    * historikk_id : INTEGER
-    * kandidatnr : INTEGER
-    * oppdragsnr : INTEGER
-    * startdato : DATE
-    * sluttdato : DATE
-    * timer_arbeidet : INTEGER
+    * jobbhistorikk_id : INT
+    * kandidatnr : INT
+    * oppdragsnr : INT
+    * virkelig_startdato : DATE
+    * virkelig_sluttdato : DATE
+    * timer_arbeidet : INT
 }
 
 entity Sluttattest {
-    * attest_id : INTEGER
-    * oppdragsnr : INTEGER
-    * kandidatnr : INTEGER
-    * beskrivelse : TEXT
+    * attest_id : INT
+    * oppdragsnr : INT
+    * kandidatnr : INT
+    * beskrivelse : VARCHAR(255)
 }
 
+Oppdrag ||--o{ Kandidat
 Oppdrag ||--o{ Bedrift
-Oppdrag ||--o{ Kvalifikasjon
 
 Jobbhistorikk ||--o{ Kandidat
 Jobbhistorikk ||--o{ Oppdrag
 
+Kvalifikasjon ||--o{ Kandidat
+
 Sluttattest ||--o{ Kandidat
 Sluttattest ||--o{ Oppdrag
+
+
 
 @enduml
