@@ -1,22 +1,47 @@
 @startuml
 
-entity Konto {
-    * kontonr : INTEGER
-    * saldo : INTEGER
+entity Kandidat {
+    * kandidatnr : INTEGER
+    * fornavn : VARCHAR
+    * etternavn : VARCHAR
+    * telefon : VARCHAR
+    * epost : VARCHAR
 }
 
-entity Kunde {
-    * kundenr : INTEGER
+entity Bedrift {
+    * organisasjonsnr : VARCHAR
+    * navn : VARCHAR
+    * telefon : VARCHAR
+    * epost : VARCHAR
+}
+
+entity Kvalifikasjon {
+    * kvalifikasjonsnr : INTEGER
     * navn : VARCHAR
 }
 
-entity Transaksjon {
-    * transaksjonsnr : INTEGER
-    * dato : DATE
-    * belop : DECIMAL
+entity Oppdrag {
+    * oppdragsnr : INTEGER
+    * bedriftsnavn : VARCHAR
+    * kvalifikasjon : VARCHAR
+    * startdato : DATE
+    * sluttdato : DATE
 }
 
-Kunde ||--o{ Konto : "owns"
-Konto ||--o{ Transaksjon : "has"
+entity Jobbhistorikk {
+    * historikk_id : INTEGER
+    * kandidatnr : INTEGER
+    * oppdragsnr : INTEGER
+    * startdato : DATE
+    * sluttdato : DATE
+    * timer_arbeidet : INTEGER
+}
+
+entity Sluttattest {
+    * attest_id : INTEGER
+    * oppdragsnr : INTEGER
+    * kandidatnr : INTEGER
+    * beskrivelse : TEXT
+}
 
 @enduml
