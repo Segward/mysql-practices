@@ -61,7 +61,7 @@ entity "Stoffrull" as stoffrull {
     + stoffrullId : INT [PK]
     --
     deltypeId : INT [FK]
-    antallMeter : DECIMAL
+    antallmeter : INT
 }
 
 entity "Arbeidsstasjon" as arbeidsstasjon {
@@ -80,10 +80,11 @@ entity "Lager" as lager {
 kunde "1" -- "0..*" ordre : Kan plassere
 ordre "1" -- "1..*" bestilling : Inneholder
 bestilling "1" -- "1" stol : Inneholder
+bestilling "1" -left- "0..1" stoffrull : Tilstrekkelig med
 stol "1" -- "1" standardStol : Kan være
 stol "1" -- "1" spesialStol : Kan være
 spesialStol "1" -- "0..*" deltype : Inneholder
-deltype "1" -- "0..*" stoffrull : Kan være
+deltype "1" -- "0..1" stoffrull : Dersom stoff
 deltype "1" -- "0..*" lager : Kan være lagret i
 lager "1" -- "0..*" arbeidsstasjon : Kan være plassert på
 
