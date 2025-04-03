@@ -17,7 +17,7 @@ INNER JOIN Kvalifikasjon b  -- Ekskluderer kandidater uten kvalifikasjoner
 ON a.kandidatnr = b.kandidatnr
 ORDER BY a.kandidatnr, b.kvalifikasjonsnr;
 
--- 4. Som oppgave 4 med også kandidater uten kvalifikasjoner
+-- 4. Som oppgave 3 med også kandidater uten kvalifikasjoner
 SELECT 
     CONCAT(a.fornavn, ' ', a.etternavn) AS kandidatnavn,
     a.kandidatnr,

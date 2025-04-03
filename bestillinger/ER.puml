@@ -1,0 +1,90 @@
+@startuml
+
+entity "Kunde" as kunde {
+    + kundeId : INT [PK]
+    --
+    navn : VARCHAR
+    adresse : VARCHAR
+}
+
+entity "Ordre" as ordre {
+    + ordreId : INT [PK]
+    --
+    kundeId : INT [FK]
+    ordreDato : DATE
+    antattLevering : DATE
+    reelLevering : DATE
+    betalingsStatus : VARCHAR
+    rabatt : DECIMAL
+}
+
+entity "Bestilling" as bestilling {
+    + bestillingId : INT [PK]
+    --
+    ordreId : INT [FK]
+    stolId : INT [FK]
+    antall : INT
+}
+
+entity "Stol" as stol {
+    + stolId : INT [PK]
+    --
+    modellNavn : VARCHAR
+    stolType : VARCHAR
+}
+
+entity "StandardStol" as standardStol {
+    + stolId : INT [PK, FK]
+    --
+    pris : DECIMAL
+    lagerBeholdning : INT
+}
+
+entity "SpesialStol" as spesialStol {
+    + stolId : INT [PK, FK]
+    --
+    pris : DECIMAL
+    lagerBeholdning : INT
+}
+
+entity "Deltype" as deltype {
+    + deltypeId : INT [PK]
+    --
+    navn : VARCHAR
+    farge : VARCHAR
+    pris : DECIMAL
+    beskrivelse : VARCHAR
+    stoffBehov : BOOLEAN
+}
+
+entity "Stoffrull" as stoffrull {
+    + stoffrullId : INT [PK]
+    --
+    deltypeId : INT [FK]
+    antallMeter : DECIMAL
+}
+
+entity "Arbeidsstasjon" as arbeidsstasjon {
+    + arbeidsstasjonId : INT [PK]
+    --
+    plassering : VARCHAR
+}
+
+entity "Lager" as lager {
+    + deltypeId : INT [PK, FK]
+    + arbeidsstasjonId : INT [PK, FK]
+    --
+    antall : INT
+}
+
+kunde "1" -- "0..*" ordre : Kan plassere
+ordre "1" -- "1..*" bestilling : Inneholder
+bestilling "1" -- "1" stol : Inneholder
+stol "1" -- "1" standardStol : Kan være
+stol "1" -- "1" spesialStol : Kan være
+spesialStol "1" -- "0..*" deltype : Inneholder
+deltype "1" -- "0..*" stoffrull : Kan være
+deltype "1" -- "0..*" lager : Kan være lagret i
+lager "1" -- "0..*" arbeidsstasjon : Kan være plassert på
+
+@enduml
