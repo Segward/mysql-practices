@@ -83,6 +83,20 @@
             "database": "bestillinger",
             "username": "root",
             "password": "root"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "webnovels",
+            "database": "webnovels",
+            "username": "root",
+            "password": "root"
         }
     ]
 }
